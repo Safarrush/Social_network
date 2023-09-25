@@ -1,0 +1,37 @@
+version: '3'
+
+volumes:
+  vsas_pg_data:
+  vsas_static:
+
+services:
+
+  db3:
+    image: postgres:13.10
+    env_file: .env
+    volumes:
+      - vsas_pg_data:/var/lib/postgresql/data
+ 
+  backend:
+   
+    build: ./mychat/
+    env_file: .env
+    volumes:
+      - vsas_static:/backend_static
+    depends_on:
+      - db3
+
+  frontend:
+    env_file: .env
+    build: ./vsas/
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+      - vsas_static:/frontend_static
+
+  gateway:
+
+      build: ./gateway/
+      volumes:
+      - vsas_static:/staticfiles/
+      ports:
+        - 8000:80 

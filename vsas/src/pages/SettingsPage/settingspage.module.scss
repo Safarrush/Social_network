@@ -1,0 +1,20 @@
+.container {
+  margin: 80px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .button {
+    padding: 10px 20px;
+    background-color: #000;
+    border: 1px solid #000;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    &:hover {
+      transition: 0.4s;
+      background-color: #fff;
+      color: #000;
+    }
+  }
+}

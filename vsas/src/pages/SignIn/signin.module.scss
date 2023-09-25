@@ -1,0 +1,94 @@
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  .wrapper {
+    padding-top: 50px;
+  }
+  .title {
+    display: flex;
+    justify-content: center;
+    margin: 30px 30px 60px;
+    font-weight: 300;
+  }
+
+  .field_wrapper {
+    position: relative;
+  }
+
+  .field {
+    display: block;
+
+    width: 300px;
+    margin: 0 auto 36px;
+    padding: 20px;
+    //border-radius: 20px;
+    border: 1px solid #eee;
+    transition: 0.3s border-color;
+    font-size: 18px;
+    &:hover {
+      border: 1px solid #aaa;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .show_hide_password {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 18px;
+    right: 45px;
+    cursor: pointer;
+    fill: #aaa;
+    &:hover {
+      path,
+      circle,
+      line {
+        transition: 0.5s;
+        stroke: #e6399b;
+      }
+    }
+  }
+
+  .error {
+    position: absolute;
+    top: 56px;
+    left: 44px;
+    font-size: 14px;
+    color: #e6399b;
+  }
+  .button {
+    display: block;
+    margin: 50px auto 100px;
+    width: 260px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+    border: 1px solid #000;
+    &:hover {
+      background-color: #fff;
+      color: #000;
+      border: 1px solid #e6399b;
+      box-shadow: 2px 2px 20px rgba(230, 57, 155, 0.5);
+      transition: 0.5s ease;
+      cursor: pointer;
+    }
+  }
+  .sub_text {
+    display: flex;
+    justify-content: center;
+    margin-top: -80px;
+    font-weight: 400;
+    a {
+      margin-left: 10px;
+      //color: #ff7800;
+      color: #e6399b;
+      &:hover {
+        border-bottom: 1px solid #e6399b;
+      }
+    }
+  }
+}

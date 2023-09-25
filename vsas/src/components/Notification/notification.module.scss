@@ -1,0 +1,47 @@
+.notifications {
+  .notification {
+    line-height: 24px;
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 10px;
+    span {
+      color: #e6399b;
+    }
+  }
+}
+.buttons {
+  display: inline-flex;
+  gap: 20px;
+  margin-left: 10px;
+
+  button {
+    width: 130px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 5px 20px;
+    border: 1px solid #000;
+    border-radius: 12px;
+
+    cursor: pointer;
+  }
+  .accept {
+    background-color: #000;
+    color: #fff;
+    &:hover {
+      background-color: #222;
+    }
+  }
+  .reject {
+    border: 1px solid #fff;
+    background-color: inherit;
+    &:hover {
+      color: #e6399b;
+    }
+  }
+}
+
+.bottom_line {
+  border-bottom: 1px solid #cac6c2;
+  margin: 20px 0 0;
+  width: 100%;
+}

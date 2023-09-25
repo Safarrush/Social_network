@@ -1,0 +1,44 @@
+.user_wrapper {
+  .user {
+    margin: 40px 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      display: inline-flex;
+      gap: 20px;
+      align-items: center;
+      .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+      }
+      .name {
+        font-size: 20px;
+      }
+    }
+    .right {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      button {
+        background-color: inherit;
+
+        border: none;
+
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 400;
+        &:hover {
+          border-bottom: 1px solid #e6399b;
+          color: #e6399b;
+        }
+      }
+    }
+  }
+}
+
+.bottom_line {
+  border-bottom: 1px solid #cac6c2;
+  margin-bottom: 20px;
+}

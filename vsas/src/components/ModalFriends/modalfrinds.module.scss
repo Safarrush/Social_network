@@ -1,0 +1,31 @@
+.friends_wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  //overflow: auto;
+}
+
+.friend {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  .friend_info {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .chat {
+    width: 30px;
+    height: 30px;
+  }
+}
+.bottom_line {
+  border-bottom: 1px solid #cac6c2;
+}
+.black {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}

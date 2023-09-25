@@ -1,0 +1,37 @@
+.friends {
+  max-width: 570px;
+  margin: 50px auto 70px;
+  padding: 20px 30px 40px;
+  background-color: inherit;
+  //border-radius: 20px;
+  box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  &:hover {
+    transition: 0.5s;
+    box-shadow: 0px 0px 50px rgba($color: #e6399b, $alpha: 0.3);
+  }
+  @media (max-width: 768px) {
+    padding: 20px 20px 40px;
+  }
+  @media (max-width: 576px) {
+    width: 400px;
+  }
+  .friends_top {
+    display: flex;
+    align-items: center;
+
+    p {
+      text-align: start;
+      font-weight: 600;
+      margin: 0 20px 0 0;
+    }
+    span {
+      font-weight: 500;
+      color: #cac6c2;
+    }
+  }
+}
+
+.friends_bottom_line {
+  border-bottom: 1px solid #cac6c2;
+  margin: 20px 0 0;
+}
