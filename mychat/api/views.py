@@ -114,7 +114,7 @@ class RemoveFriendView(APIView):
         )
         remove_entry.delete()
         data = {'sender_id': recipient, 'recipient_id': sender}
-        serializer = FriendRequestSerilizer(data=data)
+        serializer = FriendRequestSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -168,19 +168,29 @@ class OutcomingRequestsView(generics.ListAPIView):
 class AcceptFriendRequestView(generics.CreateAPIView):
     serializer_class = FriendsSerializer
     permission_classes = (IsAuthenticated,)
-
+    
     def perform_create(self, serializer):
+        user = self.request.user
+        sender_id = self.kwargs['pk']
+        recipient = User.objects.get(id=user.id)
+        sender = User.objects.get(id=sender_id)
         friend_request = FriendRequest.objects.filter(
             sender_id=self.kwargs["pk"]
         ).first()
 
         friend_request.is_pending = False
         friend_request.save()
-        serializer.save(
-            user_id_1=friend_request.sender, user_id_2=friend_request.recipient
-        )
-        # friend_request.delete()
-
+        if Friends.objects.filter(
+            (Q(user_id_1=sender, user_id_2=recipient) |
+             Q(user_id_1=recipient, user_id_2=sender))
+        ).exists():
+            raise ValidationError({"message": "Пользователи уже друзья"})
+        else:
+            serializer.save(
+                user_id_1=friend_request.sender, user_id_2=friend_request.recipient
+            )
+        friend_request.delete()
+           
 
 class RemoveFriendRequestView(APIView):
     permission_classes = (IsAuthenticated,)
