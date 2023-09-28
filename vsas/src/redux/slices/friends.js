@@ -13,7 +13,7 @@ export const friendsSlice = createSlice({
     //удалить заявку
     deleteApplication: (state, action) => {
       state.application = state.application.filter(
-        (el) => el.id !== action.payload
+        (el) => el.recepient !== action.payload
       );
     },
     //очистить список заявок

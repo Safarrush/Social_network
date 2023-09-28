@@ -43,7 +43,8 @@ export const Header = () => {
     };
   }, []);
 
-  const { data, error, isError, isLoading } = useQuery({
+  //приход заявки
+  const { data, refetch } = useQuery({
     queryKey: ["applicationArrived"],
     queryFn: async () => {
       const res = await applicationArrivedFetch(token);
@@ -55,8 +56,8 @@ export const Header = () => {
       }
     },
   });
-  if (isError) return error;
-  //if (isLoading) return <>Zagruzka</>;
+
+  console.log("Приходы заявок", data);
 
   const handleCloseModal = () => {
     setVisibleNotifications(false);
@@ -232,9 +233,11 @@ export const Header = () => {
               </svg>
             </div>
           </div>
-          <div className={styles.bottom_line}></div>
+
           {data && data.length ? (
-            data.map((el) => <Notification key={el.id} data={el} />)
+            data.map((el) => (
+              <Notification key={el.id} data={el} refetch={refetch} />
+            ))
           ) : (
             <p className={styles.no_notifications}>У вас нет уведомлений.</p>
           )}

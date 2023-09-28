@@ -3,8 +3,7 @@ import styles from "./friends.module.scss";
 import { getMyFriendsFetch } from "../../api/friendsApi";
 import { Friend } from "./Friend";
 
-//import { deleteApplication } from "../../redux/slices/friends";
-
+//список друзей
 export const Friends = () => {
   const { data: friends } = useQuery({
     queryKey: ["getMyfriends"],

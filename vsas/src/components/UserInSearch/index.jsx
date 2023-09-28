@@ -8,47 +8,87 @@ import {
   getMyFriendsFetch,
 } from "../../api/friendsApi/index";
 import { applicationGoneFetch } from "../../api/friendsApi/index.js";
-import { Spinner } from "../Spinner";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
-  //clearApplication,
+  clearApplication,
   deleteApplication,
   setApplication,
 } from "../../redux/slices/friends";
+import { useEffect } from "react";
 
 export const UserInSearch = ({ name, id }) => {
   const dispatch = useDispatch();
   const application = useSelector((state) => state.friends.application);
+  //console.log("applicationInRedux", application);
 
   //получить список друзей
-  const { data: friends } = useQuery({
+  const { data: friends, refetch } = useQuery({
     queryKey: ["getMyfriends"],
     queryFn: async () => {
       const res = await getMyFriendsFetch();
       if (res.ok) {
         const responce = await res.json();
+
         return responce;
       }
     },
   });
+  //console.log("friends", friends);
 
+  //Удаляю из редакса заявку, если она была принята или отклонена
+  useEffect(() => {
+    const checkTheApplication = async () => {
+      const res = await applicationGoneFetch();
+      if (res.ok) {
+        const responce = await res.json();
+
+        if (responce.length === 0) {
+          dispatch(clearApplication());
+        }
+        responce.forEach((el) => {
+          if (el.is_pending === false) {
+            dispatch(deleteApplication(el.recipient));
+          }
+        });
+        console.log("Заявки ушли", responce);
+      }
+    };
+    checkTheApplication();
+  }, [dispatch]);
+
+  //удалить друга
+  const deleteFriend = async () => {
+    const res = await deleteFriendFetch(id);
+    if (res.ok) {
+      //перевызваю friends для отображения отображения кнопки "добавить в друзья"
+      await refetch();
+    }
+  };
   //запрос на добавление в друзья
-  const { mutateAsync, error, isError, isLoading } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: async (id) => {
       await addFriendFetch(id);
     },
   });
-  if (isLoading) return <Spinner />;
-  if (isError) return error;
-
   //отправить заявку
   const handleAddFriend = async () => {
     mutateAsync(id);
-    const res = await applicationGoneFetch(id);
-    if (res.ok) {
-      dispatch(setApplication({ id: id, application: true }));
-    }
-    //dispatch(clearApplication()) //очистка запросов в случае ошибок;
+    setTimeout(async () => {
+      const res = await applicationGoneFetch();
+      if (res.ok) {
+        const responce = await res.json();
+        const app = responce.find((el) => el.recipient === id);
+        dispatch(
+          setApplication({
+            recepient: id,
+            id: app.id,
+            application: app.is_pending,
+          })
+        );
+      }
+    }, 50);
+    //dispatch(clearApplication()); //очистка запросов в случае ошибок;
   };
 
   //отменить заяку
@@ -56,15 +96,6 @@ export const UserInSearch = ({ name, id }) => {
     const res = await cancelApplicationFetch(id);
     if (res.ok) {
       dispatch(deleteApplication(id));
-      //dispatch(clearApplication()) //очистка запросов в случае ошибок;
-    }
-  };
-
-  //удалить друга
-  const deleteFriend = async () => {
-    const res = await deleteFriendFetch(id);
-    if (res.ok) {
-      console.log("Друг удален");
     }
   };
 
@@ -76,15 +107,19 @@ export const UserInSearch = ({ name, id }) => {
           <p className={styles.name}>{name}</p>
         </div>
         <div className={styles.right}>
-          {friends && friends.some((friend) => friend.id === id) ? (
+          {friends &&
+          friends.length &&
+          friends.some((friend) => friend.id === id) ? (
             //кнопка удаления
-            <button onClick={deleteFriend}>Удалить из друзей</button>
-          ) : application.some((app) => app.id === id) ? (
+            <button onClick={() => deleteFriend()}>Удалить из друзей</button>
+          ) : application.some((app) => app.recepient === id) ? (
             //кнопка отмены
-            <button onClick={handleCancelApplication}>Отменить заявку</button>
+            <button onClick={() => handleCancelApplication()}>
+              Отменить заявку
+            </button>
           ) : (
             //кнопка добавления
-            <button onClick={handleAddFriend}>Добавить в друзья</button>
+            <button onClick={() => handleAddFriend()}>Добавить в друзья</button>
           )}
         </div>
       </div>
