@@ -19,7 +19,12 @@
       }
     }
     .right {
+      max-width: 475px;
       .top {
+        display: flex;
+        justify-content: space-between;
+      }
+      .top_left {
         display: flex;
         gap: 10px;
         text-align: left;
@@ -31,12 +36,22 @@
           color: #cac6c2;
         }
       }
+      svg {
+        height: 24px;
+        width: 24px;
+        cursor: pointer;
+        fill: #cac6c2;
+        &:hover {
+          fill: #e6399b;
+        }
+      }
     }
     .comment {
       text-align: left;
-
       font-size: 17px;
       margin: 20px 0;
+      word-wrap: break-word;
+      white-space: pre-line;
     }
   }
 }

@@ -51,7 +51,7 @@ export const UserInSearch = ({ name, id }) => {
             dispatch(deleteApplication(el.recipient));
           }
         });
-        console.log("Заявки ушли", responce);
+        //console.log("Заявки ушли", responce);
       }
     };
     checkTheApplication();

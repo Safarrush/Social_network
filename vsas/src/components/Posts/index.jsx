@@ -5,12 +5,15 @@ import { Post } from "./Post";
 import { EmptyWall } from "./EmptyWall/index";
 
 export const Posts = () => {
-  //const token = localStorage.getItem("TOKEN");
+  //const queryClient = useQueryClient();
+  //queryClient.invalidateQueries({ queryKey: ["getPosts"] });
 
-  const queryClient = useQueryClient();
-  queryClient.invalidateQueries({ queryKey: ["getPosts"] });
+  //Получить все посты
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["getPosts"],
+    options: {
+      keepPreviousData: true,
+    },
     queryFn: async () => {
       const res = await getPostsFetch();
       if (res.ok) {
@@ -19,7 +22,7 @@ export const Posts = () => {
       }
     },
   });
-
+  //console.log(data);
   if (isError) return <>{error}</>;
   return (
     <>

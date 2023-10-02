@@ -42,10 +42,10 @@ class Comment(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    body = models.TextField(blank=True, null=True)
+    body = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+#blank=True, null=True
     class Meta:
         ordering = ('-created_at',)
 

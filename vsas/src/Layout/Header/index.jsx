@@ -57,7 +57,7 @@ export const Header = () => {
     },
   });
 
-  console.log("Приходы заявок", data);
+  //console.log("Приходы заявок", data);
 
   const handleCloseModal = () => {
     setVisibleNotifications(false);

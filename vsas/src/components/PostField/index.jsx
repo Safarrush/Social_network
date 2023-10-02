@@ -27,13 +27,19 @@ export const PostField = () => {
   if (isError) return { error };
   if (isLoading) return <Spinner />;
 
+  //Опубликовать пост
   const handleSubmit = (e) => {
-    //e.preventDefault();
+    e.preventDefault();
     mutateAsync({ content: post });
+    setPost("");
   };
+
+  //Показать/скрыть окно с эмодзи
   const showEmoji = () => {
     setVisibleEmoji(!visibleEmoji);
   };
+
+  //добавление эмо в строку
   const addEmoji = (e) => {
     setPost((prev) => prev + e.native);
   };
@@ -41,7 +47,7 @@ export const PostField = () => {
   return (
     <>
       <div className={styles.field}>
-        <form type="submit" onSubmit={handleSubmit}>
+        <form type="submit" onSubmit={(e) => handleSubmit(e)}>
           <TextareaAutosize
             className={styles.textarea}
             minRows={1} // Минимальное количество строк
