@@ -1,13 +1,10 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../Spinner";
 import { getPostsFetch } from "../../api";
 import { Post } from "./Post";
 import { EmptyWall } from "./EmptyWall/index";
 
 export const Posts = () => {
-  //const queryClient = useQueryClient();
-  //queryClient.invalidateQueries({ queryKey: ["getPosts"] });
-
   //Получить все посты
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["getPosts"],
@@ -22,8 +19,9 @@ export const Posts = () => {
       }
     },
   });
-  //console.log(data);
+
   if (isError) return <>{error}</>;
+
   return (
     <>
       {data ? (

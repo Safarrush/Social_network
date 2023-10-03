@@ -1,5 +1,4 @@
 import styles from "./users.module.scss";
-import search from "../../assets/icons/search.svg";
 import { useAuth } from "../../hooks/useAuth";
 import { getUsers } from "../../api";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +7,8 @@ import { UserInSearch } from "../../components/UserInSearch";
 
 export const Users = () => {
   const { token } = useAuth();
+
+  //получить список всех пользователей
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["getUsers", token],
     queryFn: async () => {
@@ -20,7 +21,7 @@ export const Users = () => {
   });
   if (isLoading) return <Spinner />;
   if (isError) return error;
-
+  console.log(data);
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
@@ -42,6 +43,7 @@ export const Users = () => {
             key={user.username}
             name={user.first_name + " " + user.last_name}
             id={user.id}
+            username={user.username}
             className={styles.user}
           />
         ))}

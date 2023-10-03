@@ -1,38 +1,26 @@
-.friends_list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(1, 1fr);
-  grid-column-gap: 20px;
-  grid-row-gap: 30px;
-  margin-top: 30px;
-  @media (max-width: 490px) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 84px;
-  }
-  .friend {
-    max-width: 121px;
-    overflow: hidden;
-    text-overflow: clip;
-    padding: 10px 0 10px;
-    border-radius: 18px;
-    &:hover {
-      cursor: pointer;
+.friend {
+  max-width: 121px;
+  overflow: hidden;
+  text-overflow: clip;
+  padding: 10px 0 10px;
+  border-radius: 18px;
 
-      p {
-        transition: 0.3s;
-        color: #fba4c9;
-      }
-    }
-    img {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-    }
+  &:hover {
+    cursor: pointer;
+
     p {
-      margin: 0;
-      font-weight: 600;
-      font-size: 14px;
+      transition: 0.3s;
+      color: #fba4c9;
     }
+  }
+  img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+  }
+  p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 14px;
   }
 }

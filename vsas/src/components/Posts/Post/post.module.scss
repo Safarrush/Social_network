@@ -5,7 +5,10 @@
   margin: 0 auto 20px;
   padding: 20px 30px 40px;
   padding: 20px 30px 10px;
+  border-radius: 10px;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+  //font-family: "Source Code Pro", monospace;
+
   &:hover {
     transition: 0.5s;
     box-shadow: 0px 0px 50px rgba($color: #e6399b, $alpha: 0.3);
@@ -68,7 +71,7 @@
       .post {
         text-align: left;
         width: 100%;
-        font-size: 20px;
+        font-size: 18px;
         margin: 20px 0;
         word-wrap: break-word;
         white-space: pre-line;
@@ -160,6 +163,7 @@
           align-items: center;
           gap: 20px;
           .names_modal {
+            text-align: left;
             p {
               font-weight: 700;
               margin: 0;
@@ -188,6 +192,8 @@
       text-align: left;
       font-size: 20px;
       margin: 20px 0;
+      word-wrap: break-word;
+      white-space: pre-line;
     }
     .bottom {
       margin-top: 10px;

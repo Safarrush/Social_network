@@ -16,8 +16,9 @@ import {
   setApplication,
 } from "../../redux/slices/friends";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-export const UserInSearch = ({ name, id }) => {
+export const UserInSearch = ({ name, id, username }) => {
   const dispatch = useDispatch();
   const application = useSelector((state) => state.friends.application);
   //console.log("applicationInRedux", application);
@@ -102,10 +103,12 @@ export const UserInSearch = ({ name, id }) => {
   return (
     <div className={styles.user_wrapper}>
       <div className={styles.user}>
-        <div className={styles.left}>
-          <img src={black} alt="" className={styles.avatar} />
-          <p className={styles.name}>{name}</p>
-        </div>
+        <Link to={`/profile/${username}`}>
+          <div className={styles.left}>
+            <img src={black} alt="" className={styles.avatar} />
+            <p className={styles.name}>{name}</p>
+          </div>
+        </Link>
         <div className={styles.right}>
           {friends &&
           friends.length &&

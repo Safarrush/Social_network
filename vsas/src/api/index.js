@@ -105,3 +105,13 @@ export const getUsers = () => {
     },
   });
 };
+
+export const getUserProfile = (username) => {
+  const token = localStorage.getItem("TOKEN");
+  return fetch(`http://127.0.0.1:8000/api/profile/${username}/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
+};
