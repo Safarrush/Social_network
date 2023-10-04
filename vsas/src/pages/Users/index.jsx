@@ -21,7 +21,7 @@ export const Users = () => {
   });
   if (isLoading) return <Spinner />;
   if (isError) return error;
-  console.log(data);
+
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>

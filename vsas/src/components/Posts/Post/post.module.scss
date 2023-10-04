@@ -62,6 +62,7 @@
           svg {
             height: 20px;
             cursor: pointer;
+            transition: 0.3s;
             &:hover {
               fill: #e6399b;
             }
@@ -93,6 +94,7 @@
             align-self: center;
             border-radius: 50%;
             fill: #cac6c2;
+            transition: 0.3s;
             &:hover {
               background-color: #fbe1ec;
               fill: #e6399b;
@@ -104,6 +106,7 @@
             top: 8px;
             right: -10px;
             color: #cac6c2;
+            transition: 0.3s;
           }
           &:hover {
             fill: #e6399b;

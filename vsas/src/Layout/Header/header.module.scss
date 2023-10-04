@@ -9,8 +9,9 @@
   color: #000;
 
   @media (max-width: 1199px) {
-    background-color: rgba(#faf7f6, 0.4);
-    backdrop-filter: blur(5px);
+    background-color: rgba(#faf7f6, 0.1);
+    backdrop-filter: blur(2px);
+
     z-index: 2;
   }
   @media (max-width: 992px) {
@@ -31,6 +32,7 @@
       color: #e6399b;
     }
   }
+
   @media (max-width: 1275px) {
     font-size: 30px;
   }
@@ -43,8 +45,8 @@
   display: inline-flex;
   gap: 10px;
   .icons {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     padding: 8px;
     cursor: pointer;
@@ -55,8 +57,13 @@
     }
   }
   .search {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
+    circle,
+    line {
+      transition: 0.3s;
+      stroke: #cac6c2;
+    }
     @media (max-width: 1275px) {
       width: 36px;
       height: 36px;
@@ -65,24 +72,31 @@
       circle,
       line {
         transition: 0.3s;
-        stroke: #e6399b;
+        stroke: rgba($color: #e6399b, $alpha: 0.7);
       }
     }
   }
   .notifications {
+    path {
+      fill: #cac6c2;
+    }
     &:hover {
       path {
         transition: 0.3s;
-        fill: #e6399b;
+        fill: rgba($color: #e6399b, $alpha: 0.7);
       }
     }
   }
   .settings {
+    path,
+    circle {
+      stroke: #cac6c2;
+    }
     &:hover {
       circle,
       path {
         transition: 0.3s;
-        stroke: #e6399b;
+        stroke: rgba($color: #e6399b, $alpha: 0.7);
       }
     }
   }

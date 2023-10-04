@@ -10,7 +10,6 @@ export const getCommentsFetch = (id) => {
 };
 
 export const createCommentFetch = (commentData) => {
-  console.log("iddd:", commentData.id, "valuesas:", commentData.body);
   const token = localStorage.getItem("TOKEN");
   return fetch(
     `http://127.0.0.1:8000/api/vsas/posts/${commentData.id}/comment/`,

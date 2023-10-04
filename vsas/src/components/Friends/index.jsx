@@ -2,12 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import styles from "./friends.module.scss";
 import { getMyFriendsFetch } from "../../api/friendsApi";
 import { Friend } from "./Friend";
-import { useState } from "react";
-import classNames from "classnames";
+import { useEffect, useRef, useState } from "react";
+//import classNames from "classnames";
 
 //список друзей
 export const Friends = () => {
   const [showAll, setShowAll] = useState(false);
+  const [contentHeight, setContentHeight] = useState(180);
+  const friendsRef = useRef(null);
 
   //получить всех друзей
   const { data: friends = [] } = useQuery({
@@ -21,27 +23,49 @@ export const Friends = () => {
     },
   });
 
+  //отображаемы друзья в зависимости от разворачивания/сворачивания блока
   const displayedFriends =
-    showAll && Array.isArray(friends) ? friends : friends.slice(0, 4);
-  console.log(displayedFriends);
+    showAll && Array.isArray(friends) && friends.length > 4
+      ? friends
+      : friends.slice(0, 4);
+  console.log("displayedFriends", displayedFriends);
+  console.log("friends", friends);
+
+  //получить высоту блока с друзьями
+  useEffect(() => {
+    if (friendsRef.current && showAll) {
+      // Получаем высоту содержимого
+      const newHeight = friendsRef.current.scrollHeight;
+      // Устанавливаем новую высоту
+      setContentHeight(newHeight - 90);
+    } else {
+      // Возвращаем начальную высоту
+      setContentHeight(180);
+    }
+  }, [showAll]);
+
   return (
-    <div className={styles.friends}>
+    <div
+      className={styles.friends}
+      ref={friendsRef}
+      style={{ height: showAll ? `${contentHeight}px` : "180px" }}
+    >
       <div className={styles.friends_top}>
         <p>Друзья</p>
         <span>{friends ? friends.length : 0}</span>
       </div>
       <div className={styles.friends_bottom_line}></div>
 
-      <div
-        className={classNames(styles.friends_list, {
-          [styles["show_all"]]: showAll,
-        })}
-      >
-        {friends &&
-          displayedFriends.map((friend) => (
-            <Friend key={friend.id} friend={friend} />
-          ))}
-      </div>
+      {friends && friends.length ? (
+        <div className={styles.friends_list}>
+          {friends &&
+            displayedFriends.map((friend) => (
+              <Friend key={friend.id} friend={friend} />
+            ))}
+        </div>
+      ) : (
+        <p className={styles.no_friends}>Список друзей пуст</p>
+      )}
 
       {friends && friends.length > 4 ? (
         !showAll && friends ? (

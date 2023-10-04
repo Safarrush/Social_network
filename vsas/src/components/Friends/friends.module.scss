@@ -1,11 +1,14 @@
 .friends {
   max-width: 570px;
+  height: 180px;
   margin: 50px auto 70px;
-  padding: 20px 30px 40px;
+  padding: 20px 30px 60px;
   background-color: inherit;
   border-radius: 10px;
   box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
   position: relative;
+  transition: all 1s ease-out;
+  overflow: hidden;
   &:hover {
     transition: 0.5s;
     box-shadow: 0px 0px 50px rgba($color: #e6399b, $alpha: 0.3);
@@ -30,22 +33,28 @@
       color: #cac6c2;
     }
   }
+  .no_friends {
+    font-family: "Source Code Pro", monospace;
+    align-items: center;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    color: #cac6c2;
+    margin-top: 50px;
+  }
   .friends_list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(1, 1fr);
     grid-column-gap: 20px;
     grid-row-gap: 30px;
-    margin: 30px 0 30px;
+    margin: 30px 0 0;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
     @media (max-width: 490px) {
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(2, 1fr);
       grid-column-gap: 84px;
-    }
-    .show_all {
-      max-height: none;
     }
   }
   svg {
@@ -55,7 +64,7 @@
     height: 40px;
     width: 40px;
     stroke: #cac6c2;
-    transition: 0.5s;
+    transition: 0.3s;
     &:hover {
       cursor: pointer;
       stroke: #e6399b;

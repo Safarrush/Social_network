@@ -57,8 +57,6 @@ export const Header = () => {
     },
   });
 
-  //console.log("Приходы заявок", data);
-
   const handleCloseModal = () => {
     setVisibleNotifications(false);
     document.body.classList.remove("bodyModalOpen");

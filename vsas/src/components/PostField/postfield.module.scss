@@ -59,20 +59,21 @@
       }
     }
 
-    .smile {
-      path {
-        fill: #cac6c2;
-      }
-    }
     svg {
       padding: 8px;
       border-radius: 50%;
       width: 26px;
       height: 26px;
       cursor: pointer;
+      transition: 0.3s;
+      path {
+        fill: #cac6c2;
+      }
       &:hover {
         background-color: #fbe1ec;
         path {
+          transition: 0.3s;
+
           fill: #e6399b;
         }
       }
