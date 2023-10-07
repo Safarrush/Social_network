@@ -18,6 +18,8 @@ export const Header = () => {
   //показать скрыть уведомления
   const [visibleNotifications, setVisibleNotifications] = useState(false);
 
+  const [openContent, setOpenContent] = useState(false);
+
   //показать скрыть бар
   const [barModal, setBarModal] = useState(false);
   const handleShowBar = (e) => {
@@ -58,12 +60,17 @@ export const Header = () => {
   });
 
   const handleCloseModal = () => {
+    setOpenContent(false);
     setVisibleNotifications(false);
+
     document.body.classList.remove("bodyModalOpen");
   };
   const showNotifications = () => {
     setVisibleNotifications(true);
     setBarModal(false);
+    setTimeout(() => {
+      setOpenContent(true);
+    }, 100);
     document.body.classList.add("bodyModalOpen");
   };
   return (
@@ -212,6 +219,9 @@ export const Header = () => {
         <Modal
           active={visibleNotifications}
           setActive={setVisibleNotifications}
+          openContent={openContent}
+          setOpenContent={setOpenContent}
+          handleCloseModal={handleCloseModal}
         >
           <div className={styles.top}>
             <div className={styles.top_left}>

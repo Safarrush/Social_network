@@ -21,7 +21,6 @@ import { Link } from "react-router-dom";
 export const UserInSearch = ({ name, id, username }) => {
   const dispatch = useDispatch();
   const application = useSelector((state) => state.friends.application);
-  //console.log("applicationInRedux", application);
 
   //получить список друзей
   const { data: friends, refetch } = useQuery({
@@ -35,7 +34,6 @@ export const UserInSearch = ({ name, id, username }) => {
       }
     },
   });
-  //console.log("friends", friends);
 
   //Удаляю из редакса заявку, если она была принята или отклонена
   useEffect(() => {
@@ -52,7 +50,6 @@ export const UserInSearch = ({ name, id, username }) => {
             dispatch(deleteApplication(el.recipient));
           }
         });
-        //console.log("Заявки ушли", responce);
       }
     };
     checkTheApplication();

@@ -18,6 +18,7 @@ import { getCommentsFetch } from "../../../api/commentsApi";
 
 export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
   const [active, setActive] = useState(false);
+  const [openContent, setOpenContent] = useState(false);
 
   //Получить все комментарии поста
   const { data: comments } = useQuery({
@@ -56,6 +57,9 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
   //открыть модальное окно
   const handleOpenModal = () => {
     document.body.classList.add("bodyModalOpen");
+    setTimeout(() => {
+      setOpenContent(true);
+    }, 100);
     setActive(true);
   };
 
@@ -168,7 +172,12 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
           </div>
         </div>
       </div>
-      <ModalPost active={active} setActive={setActive}>
+      <ModalPost
+        active={active}
+        setActive={setActive}
+        openContent={openContent}
+        setOpenContent={setOpenContent}
+      >
         <div className={classNames(styles.wrapper, styles.wrapper_modal)}>
           <div className={styles.content_modal}>
             {/*<div className={styles.conten}>*/}

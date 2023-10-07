@@ -9,16 +9,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
+  //opacity: 0;
   z-index: 100;
-  pointer-events: none;
-  transition: 0.3s;
+  //pointer-events: none;
+  //transition: 0.3s;
 }
 
-.modal_active {
-  pointer-events: all;
-  opacity: 1;
-}
+//.modal_active {
+//  pointer-events: all;
+//  opacity: 1;
+//}
 
 .content {
   width: 450px;
@@ -37,4 +37,25 @@
 
 .content_active {
   transform: scale(1);
+}
+
+////////////////////////////////////////
+/* Стили для обертки модального окна */
+.modal-enter {
+  pointer-events: none;
+  opacity: 0;
+}
+.modal-enter-active {
+  opacity: 1;
+  pointer-events: all;
+  transition: 400ms;
+}
+
+.modal-exit {
+  opacity: 1;
+}
+.modal-exit-active {
+  opacity: 0;
+  transition: opacity 400ms;
+  pointer-events: none;
 }

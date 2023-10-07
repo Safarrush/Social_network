@@ -6,20 +6,13 @@
   left: 0;
   background-color: rgba($color: #000000, $alpha: 0.2);
   backdrop-filter: blur(3px);
-
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  opacity: 0;
-  z-index: 100;
-  pointer-events: none;
-  transition: 0.3s;
+  z-index: 1000000;
 }
-.modal_active {
-  pointer-events: all;
-  opacity: 1;
-}
+
 .content::-webkit-scrollbar {
   width: 10px;
 }
@@ -49,4 +42,25 @@
 
 .content_active {
   transform: scale(1);
+}
+
+////////////////////////////////////////
+/* Стили для обертки модального окна */
+.modal-enter {
+  pointer-events: none;
+  opacity: 0;
+}
+.modal-enter-active {
+  opacity: 1;
+  pointer-events: all;
+  transition: 400ms;
+}
+
+.modal-exit {
+  opacity: 1;
+}
+.modal-exit-active {
+  opacity: 0;
+  transition: opacity 400ms;
+  pointer-events: none;
 }

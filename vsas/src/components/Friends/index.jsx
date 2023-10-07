@@ -28,8 +28,6 @@ export const Friends = () => {
     showAll && Array.isArray(friends) && friends.length > 4
       ? friends
       : friends.slice(0, 4);
-  console.log("displayedFriends", displayedFriends);
-  console.log("friends", friends);
 
   //получить высоту блока с друзьями
   useEffect(() => {
