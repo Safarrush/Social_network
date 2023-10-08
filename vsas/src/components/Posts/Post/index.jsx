@@ -10,15 +10,26 @@ import {
 } from "date-fns";
 //import { Spinner } from "../../Spinner";
 import classNames from "classnames";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Comment } from "../../Comment";
 import { CommentField } from "../../CommentField";
 import { ModalPost } from "../../ModalPost";
 import { getCommentsFetch } from "../../../api/commentsApi";
+import { useClickOutSide } from "../../../hooks/useClickOutside";
 
 export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
   const [active, setActive] = useState(false);
   const [openContent, setOpenContent] = useState(false);
+  const [bar, setBar] = useState(false);
+  const [barModal, setBarModal] = useState(false);
+
+  const barModalRef = useRef(null);
+
+  //закрывать бар при кликке не на него
+  useClickOutSide(barModalRef, () => {
+    if (bar) setTimeout(() => setBar(false), 50);
+    if (barModal) setTimeout(() => setBarModal(false), 50);
+  });
 
   //Получить все комментарии поста
   const { data: comments } = useQuery({
@@ -48,10 +59,29 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
     queryClient.invalidateQueries();
   }
 
-  //удалить пост
-  const deleteClick = (e) => {
+  //открыть бар
+  const handleOpenBar = (e) => {
     e.stopPropagation();
+    setBar(!bar);
+  };
+  //открыть бар в модальном окне
+  const handleOpenModalBar = (e) => {
+    e.stopPropagation();
+    setBarModal(!barModal);
+  };
+  //удалить пост
+  const handleDeletePost = (e) => {
+    e.stopPropagation();
+    setBar(false);
+    setBarModal(false);
     mutateAsync(id);
+  };
+
+  //редактировать пост
+  const handdleEditPost = (e) => {
+    e.stopPropagation();
+    setBar(false);
+    setBarModal(false);
   };
 
   //открыть модальное окно
@@ -113,7 +143,7 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
               </div>
               <div className={styles.top_right}>
                 <svg
-                  onClick={(e) => deleteClick(e)}
+                  onClick={(e) => handleOpenBar(e)}
                   xmlns="http://www.w3.org/2000/svg"
                   height="1em"
                   viewBox="0 0 448 512"
@@ -121,6 +151,14 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
                 >
                   <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
                 </svg>
+                {bar && (
+                  <div className={styles.bar_modal} ref={barModalRef}>
+                    <ul>
+                      <li onClick={(e) => handdleEditPost(e)}>Редактировать</li>
+                      <li onClick={(e) => handleDeletePost(e)}>Удалить</li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -178,7 +216,10 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
         openContent={openContent}
         setOpenContent={setOpenContent}
       >
-        <div className={classNames(styles.wrapper, styles.wrapper_modal)}>
+        <div
+          className={classNames(styles.wrapper, styles.wrapper_modal)}
+          onClick={() => setBarModal(false)}
+        >
           <div className={styles.content_modal}>
             {/*<div className={styles.conten}>*/}
             <div className={styles.top_modal}>
@@ -194,7 +235,7 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
               </div>
               <div className={styles.top_right}>
                 <svg
-                  onClick={deleteClick}
+                  onClick={(e) => handleOpenModalBar(e)}
                   xmlns="http://www.w3.org/2000/svg"
                   height="1em"
                   viewBox="0 0 448 512"
@@ -202,6 +243,14 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
                 >
                   <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
                 </svg>
+                {barModal && (
+                  <div className={styles.bar_modal} ref={barModalRef}>
+                    <ul>
+                      <li onClick={(e) => handdleEditPost(e)}>Редактировать</li>
+                      <li onClick={(e) => handleDeletePost(e)}>Удалить</li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
 
