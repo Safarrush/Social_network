@@ -14,6 +14,7 @@
     "classnames": "^2.3.2",
     "date-fns": "^2.30.0",
     "emoji-mart": "^5.5.2",
+    "emoji-picker-react": "^4.5.2",
     "node-emoji": "^2.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

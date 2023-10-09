@@ -18,11 +18,16 @@ import { getCommentsFetch } from "../../../api/commentsApi";
 import { useClickOutSide } from "../../../hooks/useClickOutside";
 
 export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
+  //открыть/скрыть модальное окно
   const [active, setActive] = useState(false);
+  //состояние для открытия контента в модальном окне, для сохранения анимации открытия
   const [openContent, setOpenContent] = useState(false);
+  //пост/поле ввода для редактирвоания поста
+  //const [editPost, setEditPost] = useState
+  //открыть/скрыть бар
   const [bar, setBar] = useState(false);
+  //открыть/скрыть бар в модальном окне
   const [barModal, setBarModal] = useState(false);
-
   const barModalRef = useRef(null);
 
   //закрывать бар при кликке не на него
@@ -74,6 +79,7 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
     e.stopPropagation();
     setBar(false);
     setBarModal(false);
+    document.body.classList.remove("bodyModalOpen");
     mutateAsync(id);
   };
 
@@ -221,7 +227,6 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
           onClick={() => setBarModal(false)}
         >
           <div className={styles.content_modal}>
-            {/*<div className={styles.conten}>*/}
             <div className={styles.top_modal}>
               <div className={styles.top_left_modal}>
                 <img src={black} alt="" className={styles.avatar} />
@@ -255,7 +260,6 @@ export const Post = ({ content, likes, id, isLike, user, time, firstname }) => {
             </div>
 
             <p className={styles.post_modal}>{content}</p>
-            {/*<div className={styles.bottom_line}></div>*/}
 
             <div className={styles.bottom}>
               {/* Иконка лайка */}

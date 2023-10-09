@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./postfield.module.scss";
 import TextareaAutosize from "react-textarea-autosize";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -6,12 +6,20 @@ import { createPostFetch } from "../../api";
 import { Spinner } from "../Spinner";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { useClickOutSide } from "../../hooks/useClickOutside";
 
 export const PostField = () => {
   const [post, setPost] = useState("");
   const [visibleEmoji, setVisibleEmoji] = useState(false);
+  const emojiRef = useRef(null);
   const queryClient = useQueryClient();
 
+  //закрывать эмодзи при кликке не на них
+  useClickOutSide(emojiRef, () => {
+    if (visibleEmoji) setTimeout(() => setVisibleEmoji(false), 50);
+  });
+
+  //создать пост
   const { mutateAsync, error, isError, isLoading, isSuccess } = useMutation({
     mutationFn: async (values) => {
       const res = await createPostFetch(values);
@@ -34,9 +42,17 @@ export const PostField = () => {
     setPost("");
   };
 
-  //Показать/скрыть окно с эмодзи
+  //Показать окно с эмодзи
   const showEmoji = () => {
-    setVisibleEmoji(!visibleEmoji);
+    setTimeout(() => {
+      setVisibleEmoji(true);
+    }, 200);
+  };
+  //Скрыть окно с эмодзи
+  const hideEmoji = () => {
+    setTimeout(() => {
+      setVisibleEmoji(false);
+    }, 500);
   };
 
   //добавление эмо в строку
@@ -92,10 +108,20 @@ export const PostField = () => {
             </svg>
           </div>
         </form>
+
+        <div className={styles.emoji} onMouseLeave={hideEmoji} ref={emojiRef}>
+          {visibleEmoji && (
+            <Picker
+              data={data}
+              onEmojiSelect={(e) => addEmoji(e)}
+              locale="ru"
+              previewPosition={"none"}
+              perLine={8}
+              theme={"light"}
+            />
+          )}
+        </div>
       </div>
-      {visibleEmoji && (
-        <Picker data={data} onEmojiSelect={(e) => addEmoji(e)} />
-      )}
     </>
   );
 };
