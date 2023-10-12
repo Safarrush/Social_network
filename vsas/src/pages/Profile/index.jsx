@@ -7,15 +7,25 @@ import { Posts } from "../../components/Posts";
 import { PostField } from "../../components/PostField";
 import { Friends } from "../../components/Friends";
 import { getMe } from "../../api";
+import { useDispatch } from "react-redux";
+import { setMe } from "../../redux/slices/me";
 
 export const Profile = () => {
   const { token } = useAuth();
+  const dispatch = useDispatch();
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["getMyData", token],
     queryFn: async () => {
       const res = await getMe();
       if (res.ok) {
         const responce = await res.json();
+        const myData = {
+          email: responce.email,
+          first_name: responce.first_name,
+          last_name: responce.last_name,
+          username: responce.username,
+        };
+        dispatch(setMe(myData));
         return responce;
       }
     },
@@ -28,6 +38,7 @@ export const Profile = () => {
       </p>
     );
   if (isLoading) return <Spinner />;
+
   return (
     <div className={styles.container}>
       <div className={styles.profile}>

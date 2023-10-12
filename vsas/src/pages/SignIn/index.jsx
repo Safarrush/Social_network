@@ -37,9 +37,12 @@ export const SignIn = () => {
     mode: "onBlur",
   });
 
+  //для смены видимости пароля
   const [passwordType, setPasswordType] = useState("password");
+  //для отображении иконки показать/скрыть пароль
   const [passwordIcon, setPasswordIcon] = useState("show");
 
+  //смена типа пароля и иконки
   const switchPasswordType = (event) => {
     event.preventDefault();
     if (passwordType === "password") {

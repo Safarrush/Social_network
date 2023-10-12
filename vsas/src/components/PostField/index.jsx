@@ -109,7 +109,7 @@ export const PostField = () => {
           </div>
         </form>
 
-        <div className={styles.emoji} onMouseLeave={hideEmoji} ref={emojiRef}>
+        <div className={styles.emoji} ref={emojiRef}>
           {visibleEmoji && (
             <Picker
               data={data}

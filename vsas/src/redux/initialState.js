@@ -4,6 +4,7 @@ export const initialData = {
     list: [],
     application: [],
   },
+  me: {},
 };
 
 export const getInitialData = () => {

@@ -34,7 +34,7 @@
   .info {
     display: flex;
     flex-direction: column;
-
+    position: relative;
     .username {
       font-size: 20px;
       color: #cac6c2;
@@ -46,6 +46,23 @@
       font-weight: 700;
       margin: 0;
     }
+    //svg {
+    //  width: 24px;
+    //  height: 24px;
+    //  position: absolute;
+    //  top: 38px;
+    //  right: 214px;
+    //  stroke: #cac6c2;
+    //  transition: 300ms;
+    //  &:hover {
+    //    cursor: pointer;
+
+    //    stroke: #e6399b;
+    //  }
+    //  @media (max-width: 768px) {
+    //    right: 180px;
+    //  }
+    //}
   }
 }
 

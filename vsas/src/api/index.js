@@ -115,3 +115,15 @@ export const getUserProfile = (username) => {
     },
   });
 };
+
+export const editDataFetch = (values) => {
+  const token = localStorage.getItem("TOKEN");
+  return fetch(`http://127.0.0.1:8000/api/profile/me/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify(values),
+  });
+};
