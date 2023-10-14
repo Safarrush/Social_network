@@ -14,14 +14,18 @@ export const SettingsPage = () => {
   const {
     handleSubmit,
     control,
-    setError,
+    getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+  });
   const [editCurrentField, setEditCurrentField] = useState(null);
   const [active, setActive] = useState(false);
   const [openContent, setOpenContent] = useState(false);
+
   const me = useSelector((state) => state.me.me);
   const navigate = useNavigate();
+
   const fields = [
     {
       value: me.first_name,
@@ -30,7 +34,6 @@ export const SettingsPage = () => {
       name: "first_name",
       defaultValue: me.first_name,
       rules: {
-        required: "* Обязательное поле.",
         pattern: {
           value: /^[а-яА-Яa-zA-Z]+$/,
           message: "* Некорректное имя.",
@@ -45,7 +48,6 @@ export const SettingsPage = () => {
       name: "last_name",
       defaultValue: me.last_name,
       rules: {
-        required: "* Обязательное поле.",
         pattern: {
           value: /^[а-яА-Яa-zA-Z]+$/,
           message: "* Некорректная фамилия.",
@@ -60,7 +62,6 @@ export const SettingsPage = () => {
       name: "username",
       defaultValue: me.username,
       rules: {
-        required: "* Обязательное поле.",
         minLength: {
           value: 3,
           message: "* Некорректное имя пользователя.",
@@ -79,7 +80,6 @@ export const SettingsPage = () => {
       name: "email",
       defaultValue: me.email,
       rules: {
-        required: "* Обязательное поле.",
         pattern: {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           message: "* Неверный формат эл. почты!",
@@ -102,12 +102,12 @@ export const SettingsPage = () => {
 
   const handleEditClick = (field) => {
     document.body.classList.add("bodyModalOpen");
+
     const currentField = {
       value: field.value,
       label: field.label,
       modal_label: field.modal_label,
       name: field.name,
-      defaultValue: field.defaultValue,
       rules: field.rules,
       type: field.type,
     };
@@ -118,8 +118,14 @@ export const SettingsPage = () => {
     }, 100);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
+    const formValues = getValues();
+
+    mutateAsync(formValues);
+    setOpenContent(false);
+    setActive(false);
     setEditCurrentField(null);
+    document.body.classList.remove("bodyModalOpen");
   };
 
   const handleCloseModal = () => {
@@ -166,6 +172,7 @@ export const SettingsPage = () => {
           </button>
         </div>
       </div>
+
       <Modal
         active={active}
         setActive={setActive}
@@ -176,28 +183,38 @@ export const SettingsPage = () => {
         <div className={styles.modal_content}>
           <form onSubmit={handleSubmit(handleSaveClick)}>
             <div>
-              {
-                <label className={styles.label}>
-                  Сменить {editCurrentField && editCurrentField.modal_label}
-                </label>
-              }
+              <label className={styles.label}>
+                Сменить {editCurrentField && editCurrentField.modal_label}
+              </label>
+
               <Controller
-                name={editCurrentField && editCurrentField.name}
+                name="first_name"
                 control={control}
-                defaultValue={editCurrentField && editCurrentField.defaultValue}
-                rules={editCurrentField && editCurrentField.rules}
+                defaultValue={""}
+                rules={{
+                  required: {
+                    value: true,
+                    message: "* Обязательное поле",
+                  },
+                  minLength: {
+                    value: 4,
+                    message: "* Некорректное имя.",
+                  },
+                  pattern: {
+                    value: /^[а-яА-Яa-zA-Z]+$/,
+                    message: "* Некорректное имя.",
+                  },
+                }}
                 render={({ field }) => (
                   <div>
                     <input
-                      type={editCurrentField && editCurrentField.type}
+                      name="first_name"
+                      type="text"
+                      placeholder={editCurrentField && editCurrentField.value}
                       {...field}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
-                    {editCurrentField && errors[editCurrentField.name] && (
-                      <p className={styles.error}>
-                        {editCurrentField &&
-                          errors[editCurrentField.name].message}
-                      </p>
-                    )}
+                    {errors.first_name && <p>{errors.first_name.message}</p>}
                   </div>
                 )}
               />
