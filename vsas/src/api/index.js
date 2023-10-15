@@ -127,3 +127,15 @@ export const editDataFetch = (values) => {
     body: JSON.stringify(values),
   });
 };
+
+export const setPassword = (values) => {
+  const token = localStorage.getItem("TOKEN");
+  return fetch("http://127.0.0.1:8000/api/users/set_password/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify(values),
+  });
+};

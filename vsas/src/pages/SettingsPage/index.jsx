@@ -19,20 +19,21 @@ export const SettingsPage = () => {
   } = useForm({
     mode: "onBlur",
   });
-  const [editCurrentField, setEditCurrentField] = useState(null);
+  const [editCurrentField, setEditCurrentField] = useState("");
   const [active, setActive] = useState(false);
   const [openContent, setOpenContent] = useState(false);
 
   const me = useSelector((state) => state.me.me);
   const navigate = useNavigate();
 
+  //поля для изменения
   const fields = [
     {
       value: me.first_name,
       label: "Имя :",
       modal_label: "имя",
       name: "first_name",
-      defaultValue: me.first_name,
+
       rules: {
         pattern: {
           value: /^[а-яА-Яa-zA-Z]+$/,
@@ -46,7 +47,7 @@ export const SettingsPage = () => {
       label: "Фамилия :",
       modal_label: "фамилию",
       name: "last_name",
-      defaultValue: me.last_name,
+
       rules: {
         pattern: {
           value: /^[а-яА-Яa-zA-Z]+$/,
@@ -60,7 +61,7 @@ export const SettingsPage = () => {
       label: "Юзернейм :",
       modal_label: "юзернейм",
       name: "username",
-      defaultValue: me.username,
+
       rules: {
         minLength: {
           value: 3,
@@ -78,7 +79,7 @@ export const SettingsPage = () => {
       label: "E-mail :",
       modal_label: "e-mail",
       name: "email",
-      defaultValue: me.email,
+
       rules: {
         pattern: {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -87,7 +88,20 @@ export const SettingsPage = () => {
       },
       type: "email",
     },
-    { value: "*************", label: "Пароль :" },
+    {
+      value: "*************",
+      label: "Пароль :",
+      modal_label: "пароль",
+      name: "password",
+      rules: {
+        required: "* Обязательное поле.",
+        minLength: {
+          value: 8,
+          message: "* Минимальная длина пароля - 8.",
+        },
+      },
+      type: "text",
+    },
   ];
 
   const { mutateAsync } = useMutation({
@@ -100,9 +114,9 @@ export const SettingsPage = () => {
     },
   });
 
+  //открыть модалку для редактирвоания
   const handleEditClick = (field) => {
     document.body.classList.add("bodyModalOpen");
-
     const currentField = {
       value: field.value,
       label: field.label,
@@ -118,23 +132,27 @@ export const SettingsPage = () => {
     }, 100);
   };
 
+  //Сохранение инфы-отправка на сервер // доделать со всеми полями!
   const handleSaveClick = async () => {
     const formValues = getValues();
-
+    console.log(formValues);
     mutateAsync(formValues);
     setOpenContent(false);
     setActive(false);
-    setEditCurrentField(null);
+    setEditCurrentField("");
     document.body.classList.remove("bodyModalOpen");
   };
 
+  //закрытие модалки
   const handleCloseModal = () => {
     setOpenContent(false);
     setActive(false);
-    setEditCurrentField(null);
+    setEditCurrentField("");
 
     document.body.classList.remove("bodyModalOpen");
   };
+
+  //выход из приложения
   const handleLogOutClick = async () => {
     await logOutFetch();
     localStorage.clear();
@@ -188,33 +206,27 @@ export const SettingsPage = () => {
               </label>
 
               <Controller
-                name="first_name"
+                //name="first_name"
+                name={editCurrentField && editCurrentField.name}
                 control={control}
                 defaultValue={""}
-                rules={{
-                  required: {
-                    value: true,
-                    message: "* Обязательное поле",
-                  },
-                  minLength: {
-                    value: 4,
-                    message: "* Некорректное имя.",
-                  },
-                  pattern: {
-                    value: /^[а-яА-Яa-zA-Z]+$/,
-                    message: "* Некорректное имя.",
-                  },
-                }}
+                rules={editCurrentField && editCurrentField.rules}
                 render={({ field }) => (
                   <div>
                     <input
-                      name="first_name"
-                      type="text"
+                      name={editCurrentField && editCurrentField.name}
+                      type={editCurrentField && editCurrentField.type}
                       placeholder={editCurrentField && editCurrentField.value}
                       {...field}
                       onChange={(e) => field.onChange(e.target.value)}
                     />
-                    {errors.first_name && <p>{errors.first_name.message}</p>}
+                    {editCurrentField && errors[editCurrentField.name] && (
+                      <p className={styles.error}>
+                        {" "}
+                        {editCurrentField &&
+                          errors[editCurrentField.name].message}
+                      </p>
+                    )}
                   </div>
                 )}
               />
