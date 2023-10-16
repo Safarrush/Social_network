@@ -11,7 +11,6 @@ import { Modal } from "../../components/Modal";
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import TooltipForSettings from "../../components/TooltipFotSettings";
 
 export const SettingsPage = () => {
@@ -30,12 +29,6 @@ export const SettingsPage = () => {
   const customStyles = {
     backgroundColor: "#000",
     borderRadius: "10px",
-
-    progress: {
-      backgroundColor: "#e6399b", // Настройте цвет полоски прогресса
-      height: "5px", // Настройте высоту полоски прогресса
-      borderRadius: "5px", // Настройте скругление углов (если нужно)
-    },
   };
   const notify = () =>
     toast("Данные обновлены!", {
@@ -282,8 +275,8 @@ export const SettingsPage = () => {
         </div>
         <ToastContainer
           position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
+          autoClose={2000}
+          hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
           rtl={false}
