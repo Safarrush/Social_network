@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./settingspage.module.scss";
 
-import { editDataFetch, logOutFetch } from "../../api";
+import { editDataFetch, logOutFetch, setPassword } from "../../api";
 import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { Modal } from "../../components/Modal";
+import React from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import TooltipForSettings from "../../components/TooltipFotSettings";
 
 export const SettingsPage = () => {
   useAuth();
@@ -19,15 +24,29 @@ export const SettingsPage = () => {
   } = useForm({
     mode: "onBlur",
   });
-  const [editCurrentField, setEditCurrentField] = useState("");
+  const [editCurrentField, setEditCurrentField] = useState();
   const [active, setActive] = useState(false);
   const [openContent, setOpenContent] = useState(false);
+  const customStyles = {
+    backgroundColor: "#000",
+    borderRadius: "10px",
 
+    progress: {
+      backgroundColor: "#e6399b", // Настройте цвет полоски прогресса
+      height: "5px", // Настройте высоту полоски прогресса
+      borderRadius: "5px", // Настройте скругление углов (если нужно)
+    },
+  };
+  const notify = () =>
+    toast("Данные обновлены!", {
+      style: customStyles,
+    });
   const me = useSelector((state) => state.me.me);
   const navigate = useNavigate();
 
   //поля для изменения
   const fields = [
+    //Имя
     {
       value: me.first_name,
       label: "Имя :",
@@ -35,6 +54,8 @@ export const SettingsPage = () => {
       name: "first_name",
 
       rules: {
+        required: "* Обязательное поле.",
+
         pattern: {
           value: /^[а-яА-Яa-zA-Z]+$/,
           message: "* Некорректное имя.",
@@ -42,6 +63,7 @@ export const SettingsPage = () => {
       },
       type: "text",
     },
+    //Фамилия
     {
       value: me.last_name,
       label: "Фамилия :",
@@ -49,6 +71,8 @@ export const SettingsPage = () => {
       name: "last_name",
 
       rules: {
+        required: "* Обязательное поле.",
+
         pattern: {
           value: /^[а-яА-Яa-zA-Z]+$/,
           message: "* Некорректная фамилия.",
@@ -56,6 +80,8 @@ export const SettingsPage = () => {
       },
       type: "text",
     },
+
+    //Юзернейм
     {
       value: "@" + me.username,
       label: "Юзернейм :",
@@ -63,6 +89,8 @@ export const SettingsPage = () => {
       name: "username",
 
       rules: {
+        required: "* Обязательное поле.",
+
         minLength: {
           value: 3,
           message: "* Некорректное имя пользователя.",
@@ -74,6 +102,8 @@ export const SettingsPage = () => {
       },
       type: "text",
     },
+
+    //E-mail
     {
       value: me.email,
       label: "E-mail :",
@@ -81,6 +111,8 @@ export const SettingsPage = () => {
       name: "email",
 
       rules: {
+        required: "* Обязательное поле.",
+
         pattern: {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           message: "* Неверный формат эл. почты!",
@@ -88,28 +120,33 @@ export const SettingsPage = () => {
       },
       type: "email",
     },
+
+    //Пароль
     {
-      value: "*************",
+      value: "*********",
       label: "Пароль :",
       modal_label: "пароль",
       name: "password",
-      rules: {
-        required: "* Обязательное поле.",
-        minLength: {
-          value: 8,
-          message: "* Минимальная длина пароля - 8.",
-        },
-      },
-      type: "text",
     },
   ];
 
-  const { mutateAsync } = useMutation({
+  //Зпрос на изменение информации
+  const { mutateAsync: mutateData } = useMutation({
     mutationFn: async (values) => {
       const res = await editDataFetch(values);
       if (res.ok) {
         const responce = await res.json();
         return responce;
+      }
+    },
+  });
+
+  //Зпрос на изменение пароля
+  const { mutateAsync: mutatePassword } = useMutation({
+    mutationFn: async (values) => {
+      const res = await setPassword(values);
+      if (res.ok) {
+        console.log("res", res);
       }
     },
   });
@@ -126,21 +163,27 @@ export const SettingsPage = () => {
       type: field.type,
     };
     setEditCurrentField(currentField);
+    //}
     setActive(true);
     setTimeout(() => {
       setOpenContent(true);
     }, 100);
   };
 
-  //Сохранение инфы-отправка на сервер // доделать со всеми полями!
+  //Сохранение инфы-отправка на сервер
   const handleSaveClick = async () => {
     const formValues = getValues();
-    console.log(formValues);
-    mutateAsync(formValues);
+    if (editCurrentField && editCurrentField.name === "password") {
+      await mutatePassword(formValues);
+    } else {
+      await mutateData(formValues);
+    }
+
     setOpenContent(false);
     setActive(false);
     setEditCurrentField("");
     document.body.classList.remove("bodyModalOpen");
+    notify();
   };
 
   //закрытие модалки
@@ -159,6 +202,37 @@ export const SettingsPage = () => {
     navigate("/");
   };
 
+  //состояния для первого поля пароля
+  const [passwordType1, setPasswordType1] = useState("password");
+  const [passwordIcon1, setPasswordIcon1] = useState("show");
+  //состояния для второго поля пароля
+  const [passwordType2, setPasswordType2] = useState("password");
+  const [passwordIcon2, setPasswordIcon2] = useState("show");
+
+  //переключение для первого поля пароля
+  const switchPasswordType1 = () => {
+    if (passwordType1 === "password") {
+      setPasswordType1("text");
+      setPasswordIcon1("hide");
+    }
+    if (passwordType1 === "text") {
+      setPasswordType1("password");
+      setPasswordIcon1("show");
+    }
+  };
+
+  //переключение для второго поля пароля
+  const switchPasswordType2 = () => {
+    if (passwordType2 === "password") {
+      setPasswordType2("text");
+      setPasswordIcon2("hide");
+    }
+    if (passwordType2 === "text") {
+      setPasswordType2("password");
+      setPasswordIcon2("show");
+    }
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -174,7 +248,24 @@ export const SettingsPage = () => {
                   className={styles.edit}
                   onClick={() => handleEditClick(field)}
                 >
-                  Изменить
+                  {/*Изменить*/}
+                  <TooltipForSettings text={"Изменить"}>
+                    <svg
+                      class="feather feather-edit-3"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                  </TooltipForSettings>
                 </p>
               </div>
               <div className={styles.bottom_line}></div>
@@ -189,6 +280,18 @@ export const SettingsPage = () => {
             Выйти
           </button>
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </div>
 
       <Modal
@@ -205,31 +308,258 @@ export const SettingsPage = () => {
                 Сменить {editCurrentField && editCurrentField.modal_label}
               </label>
 
-              <Controller
-                //name="first_name"
-                name={editCurrentField && editCurrentField.name}
-                control={control}
-                defaultValue={""}
-                rules={editCurrentField && editCurrentField.rules}
-                render={({ field }) => (
-                  <div>
-                    <input
-                      name={editCurrentField && editCurrentField.name}
-                      type={editCurrentField && editCurrentField.type}
-                      placeholder={editCurrentField && editCurrentField.value}
-                      {...field}
-                      onChange={(e) => field.onChange(e.target.value)}
-                    />
-                    {editCurrentField && errors[editCurrentField.name] && (
-                      <p className={styles.error}>
-                        {" "}
-                        {editCurrentField &&
-                          errors[editCurrentField.name].message}
-                      </p>
+              <div className={styles.password_fields}>
+                {editCurrentField && editCurrentField.name !== "password" ? (
+                  <Controller
+                    name={editCurrentField && editCurrentField.name}
+                    control={control}
+                    defaultValue={""}
+                    rules={editCurrentField && editCurrentField.rules}
+                    render={({ field }) => (
+                      <div className={styles.input_wrapper}>
+                        <input
+                          name={editCurrentField && editCurrentField.name}
+                          type={editCurrentField && editCurrentField.type}
+                          placeholder={
+                            editCurrentField && editCurrentField.value
+                          }
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
+                        {editCurrentField && errors[editCurrentField.name] && (
+                          <p className={styles.error}>
+                            {" "}
+                            {editCurrentField &&
+                              errors[editCurrentField.name].message}
+                          </p>
+                        )}
+                      </div>
                     )}
+                  />
+                ) : (
+                  <div>
+                    <Controller
+                      name="current_password"
+                      control={control}
+                      defaultValue={""}
+                      rules={{
+                        required: "* Обязательное поле.",
+                      }}
+                      render={({ field }) => (
+                        <div className={styles.input_wrapper}>
+                          <input
+                            type={passwordType1}
+                            name="current_password"
+                            placeholder="Текущий пароль"
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                          {field.value && field.value.length ? (
+                            passwordIcon1 === "show" ? (
+                              <svg
+                                onClick={switchPasswordType1}
+                                className={styles.show_hide_password}
+                                enableBackground="new 0 0 32 32"
+                                id="Editable-line"
+                                version="1.1"
+                                viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z"
+                                  fill="none"
+                                  id="XMLID_10_"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                                <circle
+                                  cx="16"
+                                  cy="16"
+                                  fill="none"
+                                  id="XMLID_12_"
+                                  r="5"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                              </svg>
+                            ) : (
+                              <svg
+                                onClick={switchPasswordType1}
+                                className={styles.show_hide_password}
+                                enableBackground="new 0 0 32 32"
+                                id="Editable-line"
+                                version="1.1"
+                                viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z"
+                                  fill="none"
+                                  id="XMLID_13_"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                                <circle
+                                  cx="16"
+                                  cy="16"
+                                  fill="none"
+                                  id="XMLID_14_"
+                                  r="5"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                                <line
+                                  fill="none"
+                                  id="XMLID_15_"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                  x1="3"
+                                  x2="29"
+                                  y1="3"
+                                  y2="29"
+                                />
+                              </svg>
+                            )
+                          ) : (
+                            ""
+                          )}
+                          {errors.current_password && (
+                            <p className={styles.error}>
+                              {errors.current_password.message}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    />
+
+                    <Controller
+                      name="new_password"
+                      control={control}
+                      defaultValue={""}
+                      rules={{
+                        required: "* Обязательное поле.",
+                        minLength: {
+                          value: 8,
+                          message: "* Минимальная длина пароля - 8.",
+                        },
+                      }}
+                      render={({ field }) => (
+                        <div className={styles.input_wrapper}>
+                          <input
+                            type={passwordType2}
+                            name="new_password"
+                            placeholder="Новый пароль"
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                          {field.value ? (
+                            passwordIcon2 === "show" ? (
+                              <svg
+                                onClick={switchPasswordType2}
+                                className={styles.show_hide_password}
+                                enableBackground="new 0 0 32 32"
+                                id="Editable-line"
+                                version="1.1"
+                                viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z"
+                                  fill="none"
+                                  id="XMLID_10_"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                                <circle
+                                  cx="16"
+                                  cy="16"
+                                  fill="none"
+                                  id="XMLID_12_"
+                                  r="5"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                              </svg>
+                            ) : (
+                              <svg
+                                onClick={switchPasswordType2}
+                                className={styles.show_hide_password}
+                                enableBackground="new 0 0 32 32"
+                                id="Editable-line"
+                                version="1.1"
+                                viewBox="0 0 32 32"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z"
+                                  fill="none"
+                                  id="XMLID_13_"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                                <circle
+                                  cx="16"
+                                  cy="16"
+                                  fill="none"
+                                  id="XMLID_14_"
+                                  r="5"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                />
+                                <line
+                                  fill="none"
+                                  id="XMLID_15_"
+                                  stroke="#000000"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeMiterlimit="10"
+                                  strokeWidth="2"
+                                  x1="3"
+                                  x2="29"
+                                  y1="3"
+                                  y2="29"
+                                />
+                              </svg>
+                            )
+                          ) : (
+                            ""
+                          )}
+                          {errors.new_password && (
+                            <p className={styles.error}>
+                              {errors.new_password.message}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    />
                   </div>
                 )}
-              />
+              </div>
             </div>
             <button type="submit">Сохранить</button>
           </form>
