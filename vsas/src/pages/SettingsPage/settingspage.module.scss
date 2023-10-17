@@ -1,36 +1,50 @@
 .container {
-  margin: 40px 80px 80px;
+  max-width: 660px;
+  margin: 40px auto 80px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
 
   .actions {
+    width: auto;
     padding: 70px 0 0;
     border-radius: 10px;
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
-    width: 700px;
-    &:hover {
-      transition: 0.5s;
-      box-shadow: 0px 0px 50px rgba($color: #e6399b, $alpha: 0.3);
+    //box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+    @media (max-width: 768px) {
+      padding: 50px 0 0;
     }
+    @media (max-width: 576px) {
+      padding: 40px 0 0;
+    }
+
+    //&:hover {
+    //  transition: 0.5s;
+    //  box-shadow: 0px 0px 50px rgba($color: #e6399b, $alpha: 0.3);
+    //}
     .action {
-      display: grid;
-      grid-template-columns: 2fr 2fr 1fr;
-      grid-template-rows: 1fr;
-      grid-column-gap: 30px;
-      grid-row-gap: 0px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       padding: 10px 50px;
-      p {
+
+      span {
+        width: 100px;
+        color: #999;
+        font-weight: 600;
+        @media (max-width: 576px) {
+          font-size: 14px;
+        }
+      }
+
+      .info {
         margin: 0;
         font-size: 17px;
         color: #777;
-      }
-      .info {
+        width: 200px;
         color: #e6399b;
         font-weight: 600;
+        @media (max-width: 576px) {
+          font-size: 15px;
+        }
       }
       .edit {
         color: #cac6c2;
@@ -39,6 +53,10 @@
         svg {
           width: 26px;
           height: 26px;
+          @media (max-width: 576px) {
+            width: 22px;
+            height: 22px;
+          }
         }
         &:hover {
           cursor: pointer;
@@ -48,12 +66,15 @@
       }
     }
   }
-  .button {
+  .button_wrapper {
     display: flex;
     justify-content: center;
+  }
+  .button {
     width: 380px;
     padding: 20px 20px;
-    margin: 60px auto;
+    margin: 50px auto;
+
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
 
     border: none;
@@ -75,8 +96,7 @@
 .bottom_line {
   width: 88%;
   margin: 5px auto;
-  border-bottom: 1px solid #cac6c2;
-  //margin: 20px 0 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .modal_content {
@@ -84,7 +104,7 @@
   justify-content: center;
   text-align: center;
   .label {
-    //font-family: "Source Code Pro", monospace;
+    font-family: "Source Code Pro", monospace;
     margin-top: 50px;
     padding: 30px;
     font-size: 24px;

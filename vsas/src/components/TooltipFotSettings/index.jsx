@@ -13,7 +13,7 @@ const TooltipForSettings = ({ text, children }) => {
       {
         name: "offset",
         options: {
-          offset: [0, -70], // Дополнительное смещение, если это необходимо
+          offset: [0, 10], // Дополнительное смещение
         },
       },
     ],

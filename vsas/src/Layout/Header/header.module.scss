@@ -1,5 +1,7 @@
 .header {
-  width: 92%;
+  //width: 92%;
+  width: 100%;
+  box-sizing: border-box;
   //width: auto;
   position: fixed;
   display: flex;
@@ -10,12 +12,8 @@
   background-color: rgba(#faf7f6, 0.5);
   backdrop-filter: blur(2px);
   z-index: 1;
-
-  @media (max-width: 992px) {
-    width: 88%;
-  }
-  @media (max-width: 768px) {
-    width: 84%;
+  @media (max-width: 576px) {
+    padding: 0 30px;
   }
 }
 

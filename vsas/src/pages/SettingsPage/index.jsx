@@ -257,7 +257,6 @@ export const SettingsPage = () => {
                 <div className={styles.edit}>
                   <TooltipForSettings text={"Изменить"}>
                     <svg
-                      //className={styles.edit}
                       onClick={() => handleEditClick(field)}
                       fill="none"
                       stroke="currentColor"
@@ -277,14 +276,15 @@ export const SettingsPage = () => {
               <div className={styles.bottom_line}></div>
             </div>
           ))}
-
-          <button
-            type="button"
-            onClick={handleLogOutClick}
-            className={styles.button}
-          >
-            Выйти
-          </button>
+          <div className={styles.button_wrapper}>
+            <button
+              type="button"
+              onClick={handleLogOutClick}
+              className={styles.button}
+            >
+              Выйти
+            </button>
+          </div>
         </div>
         <ToastContainer
           position="top-right"
