@@ -22,6 +22,9 @@
   overflow-x: hidden;
   transform: scale(0);
   transition: 0.2s all;
+  @media (max-width: 768px) {
+    width: 360px;
+  }
 }
 
 .content_active {

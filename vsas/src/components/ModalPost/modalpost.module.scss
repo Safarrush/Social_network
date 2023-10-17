@@ -35,9 +35,8 @@
   background-color: #faf7f6;
   transform: scale(0);
   transition: 0.2s all;
-  @media (max-width: 1199px) {
-    //max-height: 75vh;
-    //margin-top: 100px;
+  @media (max-width: 768px) {
+    width: 360px;
   }
 }
 

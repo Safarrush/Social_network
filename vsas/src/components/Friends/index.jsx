@@ -3,6 +3,7 @@ import styles from "./friends.module.scss";
 import { getMyFriendsFetch } from "../../api/friendsApi";
 import { Friend } from "./Friend";
 import { useEffect, useRef, useState } from "react";
+import { Spinner } from "../Spinner";
 //import classNames from "classnames";
 
 //список друзей
@@ -12,7 +13,7 @@ export const Friends = () => {
   const friendsRef = useRef(null);
 
   //получить всех друзей
-  const { data: friends = [] } = useQuery({
+  const { data: friends = [], isLoading } = useQuery({
     queryKey: ["getMyfriends"],
     queryFn: async () => {
       const res = await getMyFriendsFetch();
@@ -35,13 +36,14 @@ export const Friends = () => {
       // Получаем высоту содержимого
       const newHeight = friendsRef.current.scrollHeight;
       // Устанавливаем новую высоту
-      setContentHeight(newHeight - 90);
+      setContentHeight(newHeight - 70);
     } else {
       // Возвращаем начальную высоту
       setContentHeight(180);
     }
   }, [showAll]);
 
+  //if (isLoading) return <Spinner />;
   return (
     <div
       className={styles.friends}
@@ -53,7 +55,7 @@ export const Friends = () => {
         <span>{friends ? friends.length : 0}</span>
       </div>
       <div className={styles.friends_bottom_line}></div>
-
+      {isLoading && <Spinner />}
       {friends && friends.length ? (
         <div className={styles.friends_list}>
           {friends &&

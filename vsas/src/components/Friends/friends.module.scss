@@ -1,5 +1,6 @@
 .friends {
-  max-width: 570px;
+  //max-width: 570px;
+  width: auto;
   height: 180px;
   margin: 50px auto 70px;
   padding: 20px 30px 60px;
@@ -16,9 +17,7 @@
   @media (max-width: 768px) {
     padding: 20px 20px 40px;
   }
-  @media (max-width: 576px) {
-    width: 400px;
-  }
+
   .friends_top {
     display: flex;
     align-items: center;
@@ -51,10 +50,12 @@
     margin: 30px 0 0;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
-    @media (max-width: 490px) {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      grid-column-gap: 84px;
+    @media (max-width: 768px) {
+      margin: 15px 0 0;
+      grid-row-gap: 10px;
+    }
+    @media (max-width: 480px) {
+      grid-row-gap: 0px;
     }
   }
   svg {
@@ -68,6 +69,10 @@
     &:hover {
       cursor: pointer;
       stroke: #e6399b;
+    }
+    @media (max-width: 768px) {
+      width: 30px;
+      height: 30px;
     }
   }
 }

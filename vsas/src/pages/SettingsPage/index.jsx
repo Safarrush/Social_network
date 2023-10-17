@@ -1,20 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./settingspage.module.scss";
 
-import { editDataFetch, logOutFetch, setPassword } from "../../api";
+import { editDataFetch, getMe, logOutFetch, setPassword } from "../../api";
 import { useAuth } from "../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { Modal } from "../../components/Modal";
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TooltipForSettings from "../../components/TooltipFotSettings";
+import { queryClient } from "../..";
+import { Spinner } from "../../components/Spinner";
 
 export const SettingsPage = () => {
-  useAuth();
+  const { token } = useAuth();
   const {
     handleSubmit,
     control,
@@ -34,14 +36,26 @@ export const SettingsPage = () => {
     toast("Данные обновлены!", {
       style: customStyles,
     });
-  const me = useSelector((state) => state.me.me);
+  //const me = useSelector((state) => state.me.me);
   const navigate = useNavigate();
+
+  //запрос для вывода информации
+  const { data: me, isLoading } = useQuery({
+    queryKey: ["getMyData", token],
+    queryFn: async () => {
+      const res = await getMe();
+      if (res.ok) {
+        const responce = await res.json();
+        return responce;
+      }
+    },
+  });
 
   //поля для изменения
   const fields = [
     //Имя
     {
-      value: me.first_name,
+      value: me && me.first_name,
       label: "Имя :",
       modal_label: "имя",
       name: "first_name",
@@ -58,7 +72,7 @@ export const SettingsPage = () => {
     },
     //Фамилия
     {
-      value: me.last_name,
+      value: me && me.last_name,
       label: "Фамилия :",
       modal_label: "фамилию",
       name: "last_name",
@@ -76,7 +90,7 @@ export const SettingsPage = () => {
 
     //Юзернейм
     {
-      value: "@" + me.username,
+      value: me && "@" + me.username,
       label: "Юзернейм :",
       modal_label: "юзернейм",
       name: "username",
@@ -98,7 +112,7 @@ export const SettingsPage = () => {
 
     //E-mail
     {
-      value: me.email,
+      value: me && me.email,
       label: "E-mail :",
       modal_label: "e-mail",
       name: "email",
@@ -169,7 +183,9 @@ export const SettingsPage = () => {
     if (editCurrentField && editCurrentField.name === "password") {
       await mutatePassword(formValues);
     } else {
-      await mutateData(formValues);
+      await mutateData(formValues, {
+        onSuccess: () => queryClient.invalidateQueries(["getMyData", token]),
+      });
     }
 
     setOpenContent(false);
@@ -225,6 +241,7 @@ export const SettingsPage = () => {
       setPasswordIcon2("show");
     }
   };
+  if (isLoading) return <Spinner />;
 
   return (
     <>
@@ -232,35 +249,31 @@ export const SettingsPage = () => {
         <div className={styles.actions}>
           <div className={styles.bottom_line}></div>
           {fields.map((field) => (
-            <div key={field.value}>
+            <div key={field.name}>
               <div className={styles.action}>
                 <span>{field.label}</span>
 
                 <p className={styles.info}>{field.value}</p>
-                <p
-                  className={styles.edit}
-                  onClick={() => handleEditClick(field)}
-                >
-                  {/*Изменить*/}
+                <div className={styles.edit}>
                   <TooltipForSettings text={"Изменить"}>
                     <svg
-                      class="feather feather-edit-3"
+                      //className={styles.edit}
+                      onClick={() => handleEditClick(field)}
                       fill="none"
-                      height="24"
                       stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       viewBox="0 0 24 24"
-                      width="24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path d="M12 20h9" />
                       <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
                     </svg>
                   </TooltipForSettings>
-                </p>
+                </div>
               </div>
+
               <div className={styles.bottom_line}></div>
             </div>
           ))}
