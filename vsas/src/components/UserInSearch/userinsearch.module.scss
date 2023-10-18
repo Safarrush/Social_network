@@ -1,9 +1,13 @@
 .user_wrapper {
   .user {
-    margin: 30px 0 30px;
+    margin: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media (max-width: 768px) {
+      margin: 10px 0;
+    }
     .left {
       display: inline-flex;
       gap: 20px;
@@ -59,48 +63,24 @@
       svg {
         width: 28px;
         height: 28px;
-        //margin-right: 10px;
-        padding: 5px;
+
+        padding: 7px;
         border-radius: 50%;
         &:hover {
           background-color: #fbe1ec;
+          fill: #e6399b;
+          cursor: pointer;
+          transition: 0.5s;
         }
       }
       .add_icon {
-        width: 24px;
-        height: 24px;
         fill: #777;
-        &:hover {
-          cursor: pointer;
-          transition: 0.5s;
-          //stroke: #e6399b;
-          fill: #e6399b;
-        }
       }
       .cancel_icon {
-        width: 24px;
-        height: 24px;
         color: #777;
-
-        &:hover {
-          cursor: pointer;
-          transition: 0.5s;
-          stroke: #e6399b;
-          //fill: #e6399b;
-        }
       }
       .delete_icon {
-        width: 26px;
-        height: 26px;
-        stroke: rgba($color: #e6399b, $alpha: 0.6);
-        //fill: rgba($color: #e6399b, $alpha: 0.6);
-
-        &:hover {
-          cursor: pointer;
-          transition: 0.5s;
-          stroke: #e6399b;
-          //fill: #e6399b;
-        }
+        fill: rgba($color: #e6399b, $alpha: 1);
       }
     }
   }
@@ -108,5 +88,5 @@
 
 .bottom_line {
   border-bottom: 1px solid #cac6c2;
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
 }
