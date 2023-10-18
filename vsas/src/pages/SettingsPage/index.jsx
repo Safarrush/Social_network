@@ -3,7 +3,7 @@ import styles from "./settingspage.module.scss";
 
 import { editDataFetch, getMe, logOutFetch, setPassword } from "../../api";
 import { useAuth } from "../../hooks/useAuth";
-import { useSelector } from "react-redux";
+
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
@@ -11,7 +11,7 @@ import { Modal } from "../../components/Modal";
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TooltipForSettings from "../../components/TooltipFotSettings";
+
 import { queryClient } from "../..";
 import { Spinner } from "../../components/Spinner";
 
@@ -36,7 +36,7 @@ export const SettingsPage = () => {
     toast("Данные обновлены!", {
       style: customStyles,
     });
-  //const me = useSelector((state) => state.me.me);
+
   const navigate = useNavigate();
 
   //запрос для вывода информации
@@ -254,22 +254,11 @@ export const SettingsPage = () => {
                 <span>{field.label}</span>
 
                 <p className={styles.info}>{field.value}</p>
-                <div className={styles.edit}>
-                  <TooltipForSettings text={"Изменить"}>
-                    <svg
-                      onClick={() => handleEditClick(field)}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M12 20h9" />
-                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                    </svg>
-                  </TooltipForSettings>
+                <div
+                  className={styles.edit}
+                  onClick={() => handleEditClick(field)}
+                >
+                  Изменить
                 </div>
               </div>
 

@@ -15,7 +15,7 @@ import {
   deleteApplication,
   setApplication,
 } from "../../redux/slices/friends";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const UserInSearch = ({ name, id, username }) => {
@@ -97,6 +97,20 @@ export const UserInSearch = ({ name, id, username }) => {
     }
   };
 
+  //состояние размера экрана
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className={styles.user_wrapper}>
       <div className={styles.user}>
@@ -106,22 +120,90 @@ export const UserInSearch = ({ name, id, username }) => {
             <p className={styles.name}>{name}</p>
           </div>
         </Link>
-        <div className={styles.right}>
-          {friends &&
-          friends.length &&
-          friends.some((friend) => friend.id === id) ? (
-            //кнопка удаления
-            <button onClick={() => deleteFriend()}>Удалить из друзей</button>
-          ) : application.some((app) => app.recepient === id) ? (
-            //кнопка отмены
-            <button onClick={() => handleCancelApplication()}>
-              Отменить заявку
-            </button>
-          ) : (
-            //кнопка добавления
-            <button onClick={() => handleAddFriend()}>Добавить в друзья</button>
-          )}
-        </div>
+        {windowWidth > 768 && (
+          <div className={styles.right}>
+            {friends &&
+            friends.length &&
+            friends.some((friend) => friend.id === id) ? (
+              //кнопка удаления
+              <button onClick={() => deleteFriend()} className={styles.delete}>
+                Удалить из друзей
+              </button>
+            ) : application.some((app) => app.recepient === id) ? (
+              //кнопка отмены
+              <button onClick={() => handleCancelApplication()}>
+                Отменить заявку
+              </button>
+            ) : (
+              //кнопка добавления
+              <button onClick={() => handleAddFriend()} className={styles.add}>
+                Добавить в друзья
+              </button>
+            )}
+          </div>
+        )}
+        {windowWidth <= 768 && (
+          <div className={styles.right}>
+            {friends &&
+            friends.length &&
+            friends.some((friend) => friend.id === id) ? (
+              //кнопка удлаения
+              <svg
+                className={styles.delete_icon}
+                onClick={() => deleteFriend()}
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <line x1="10" x2="10" y1="11" y2="17" />
+                <line x1="14" x2="14" y1="11" y2="17" />
+              </svg>
+            ) : application.some((app) => app.recepient === id) ? (
+              //кнопка отмены
+
+              <svg
+                className={styles.cancel_icon}
+                onClick={() => handleCancelApplication()}
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="4.93" x2="19.07" y1="4.93" y2="19.07" />
+              </svg>
+            ) : (
+              //кнопка добавления
+
+              <svg
+                onClick={() => handleAddFriend()}
+                className={styles.add_icon}
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  class="heroicon-ui"
+                  d="M19 10h2a1 1 0 0 1 0 2h-2v2a1 1 0 0 1-2 0v-2h-2a1 1 0 0 1 0-2h2V8a1 1 0 0 1 2 0v2zM9 12A5 5 0 1 1 9 2a5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm8 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h5a5 5 0 0 1 5 5v2z"
+                />
+              </svg>
+            )}
+          </div>
+        )}
       </div>
       <div className={styles.bottom_line}></div>
     </div>
