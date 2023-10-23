@@ -1,5 +1,6 @@
 .container {
-  max-width: 630px;
+  box-sizing: border-box;
+  max-width: 650px;
   margin: 20px auto 80px;
   padding: 20px;
   width: auto;
@@ -20,7 +21,7 @@
 }
 
 .profile {
-  width: auto;
+  width: 100%;
   text-align: center;
   margin: 0 auto;
   padding: 0px;

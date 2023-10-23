@@ -3,13 +3,14 @@ import styles from "./friends.module.scss";
 import { getMyFriendsFetch } from "../../api/friendsApi";
 import { Friend } from "./Friend";
 import { useEffect, useRef, useState } from "react";
-import { Spinner } from "../Spinner";
-//import classNames from "classnames";
+import { Spinner } from "../../components/Spinner/index";
+import FriendsSkeleton from "./FriendsSkeleton";
 
 //список друзей
-export const Friends = () => {
+export const Friends = ({ loading }) => {
   const [showAll, setShowAll] = useState(false);
   const [contentHeight, setContentHeight] = useState(180);
+
   const friendsRef = useRef(null);
 
   //получить всех друзей
@@ -36,74 +37,92 @@ export const Friends = () => {
       // Получаем высоту содержимого
       const newHeight = friendsRef.current.scrollHeight;
       // Устанавливаем новую высоту
-      setContentHeight(newHeight - 70);
+      setContentHeight(newHeight - 30);
     } else {
       // Возвращаем начальную высоту
       setContentHeight(180);
     }
   }, [showAll]);
 
-  //if (isLoading) return <Spinner />;
   return (
-    <div
-      className={styles.friends}
-      ref={friendsRef}
-      style={{ height: showAll ? `${contentHeight}px` : "180px" }}
-    >
-      <div className={styles.friends_top}>
-        <p>Друзья</p>
-        <span>{friends ? friends.length : 0}</span>
-      </div>
-      <div className={styles.friends_bottom_line}></div>
-      {isLoading && <Spinner />}
-      {friends && friends.length ? (
-        <div className={styles.friends_list}>
-          {friends &&
-            displayedFriends.map((friend) => (
-              <Friend key={friend.id} friend={friend} />
-            ))}
+    <>
+      <div
+        className={styles.friends}
+        ref={friendsRef}
+        style={{
+          height: showAll ? `${contentHeight}px` : "250px",
+        }}
+      >
+        <div className={styles.friends_top}>
+          <p>Друзья</p>
+          <span>{friends ? friends.length : 0}</span>
         </div>
-      ) : (
-        <p className={styles.no_friends}>Список друзей пуст</p>
-      )}
+        <div className={styles.friends_bottom_line}></div>
 
-      {friends && friends.length > 4 ? (
-        !showAll && friends ? (
-          <svg
-            onClick={() => setShowAll(true)}
-            className="feather feather-chevron-down"
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+        {/*<div className={styles.friends_list}>
+          <FriendsSkeleton />
+          <FriendsSkeleton />
+          <FriendsSkeleton />
+          <FriendsSkeleton />
+        </div>*/}
+        <div>
+          {isLoading ? (
+            <div className={styles.friends_list}>
+              <FriendsSkeleton />
+              <FriendsSkeleton />
+              <FriendsSkeleton />
+              <FriendsSkeleton />
+            </div>
+          ) : friends && friends.length ? (
+            <div className={styles.friends_list}>
+              {friends &&
+                displayedFriends.map((friend) => (
+                  <Friend key={friend.id} friend={friend} />
+                ))}
+            </div>
+          ) : (
+            <p className={styles.no_friends}>Список друзей пуст</p>
+          )}
+        </div>
+
+        {friends && friends.length > 4 ? (
+          !showAll && friends ? (
+            <svg
+              onClick={() => setShowAll(true)}
+              className={styles.arrow}
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          ) : (
+            <svg
+              onClick={() => setShowAll(false)}
+              className={styles.arrow}
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline points="18 15 12 9 6 15" />
+            </svg>
+          )
         ) : (
-          <svg
-            onClick={() => setShowAll(false)}
-            className="feather feather-chevron-up"
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <polyline points="18 15 12 9 6 15" />
-          </svg>
-        )
-      ) : (
-        ""
-      )}
-    </div>
+          ""
+        )}
+      </div>
+    </>
   );
 };

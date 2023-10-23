@@ -69,6 +69,7 @@ export const UserInSearch = ({ name, id, username }) => {
       await addFriendFetch(id);
     },
   });
+
   //отправить заявку
   const handleAddFriend = async () => {
     mutateAsync(id);
@@ -103,9 +104,7 @@ export const UserInSearch = ({ name, id, username }) => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };

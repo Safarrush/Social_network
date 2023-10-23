@@ -42,7 +42,8 @@ export const Posts = () => {
           <EmptyWall />
         )
       ) : isLoading ? (
-        <Spinner />
+        //<Spinner />
+        ""
       ) : (
         <EmptyWall />
       )}

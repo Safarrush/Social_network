@@ -50,9 +50,13 @@ export const Profile = () => {
             {data.first_name} {data.last_name}
           </p>
         </div>
-        <Friends />
-        <PostField className={styles.field} />
-        <Posts className={styles.wall} username={data.username} />
+        <Friends loading={isLoading} />
+        <PostField className={styles.field} loading={isLoading} />
+        <Posts
+          className={styles.wall}
+          username={data.username}
+          loading={isLoading}
+        />
       </div>
     </div>
   );
