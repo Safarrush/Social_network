@@ -4,6 +4,7 @@
     font-size: 18px;
     font-weight: 600;
     margin-left: 10px;
+    padding: 10px 0;
     span {
       color: #e6399b;
     }
@@ -32,7 +33,7 @@
     }
   }
   .reject {
-    border: 1px solid #fff;
+    border: none;
     background-color: inherit;
     &:hover {
       color: #e6399b;

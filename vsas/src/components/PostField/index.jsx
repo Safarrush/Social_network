@@ -45,7 +45,7 @@ export const PostField = ({ loading }) => {
   //Показать окно с эмодзи
   const showEmoji = () => {
     setTimeout(() => {
-      setVisibleEmoji(true);
+      setVisibleEmoji(!visibleEmoji);
     }, 200);
   };
   //Скрыть окно с эмодзи

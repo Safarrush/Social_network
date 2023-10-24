@@ -3,7 +3,6 @@ import styles from "./friends.module.scss";
 import { getMyFriendsFetch } from "../../api/friendsApi";
 import { Friend } from "./Friend";
 import { useEffect, useRef, useState } from "react";
-import { Spinner } from "../../components/Spinner/index";
 import FriendsSkeleton from "./FriendsSkeleton";
 
 //список друзей
@@ -59,12 +58,6 @@ export const Friends = ({ loading }) => {
         </div>
         <div className={styles.friends_bottom_line}></div>
 
-        {/*<div className={styles.friends_list}>
-          <FriendsSkeleton />
-          <FriendsSkeleton />
-          <FriendsSkeleton />
-          <FriendsSkeleton />
-        </div>*/}
         <div>
           {isLoading ? (
             <div className={styles.friends_list}>

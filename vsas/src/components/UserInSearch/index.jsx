@@ -148,6 +148,7 @@ export const UserInSearch = ({ name, id, username }) => {
             friends.some((friend) => friend.id === id) ? (
               //кнопка удлаения
               <svg
+                onClick={() => deleteFriend()}
                 className={styles.delete_icon}
                 id="svg8"
                 version="1.1"
@@ -170,6 +171,7 @@ export const UserInSearch = ({ name, id, username }) => {
               //кнопка отмены
 
               <svg
+                onClick={() => handleCancelApplication()}
                 className={styles.cancel_icon}
                 id="svg8"
                 version="1.1"
@@ -191,6 +193,7 @@ export const UserInSearch = ({ name, id, username }) => {
             ) : (
               //кнопка добавления
               <svg
+                onClick={() => handleAddFriend()}
                 className={styles.add_icon}
                 id="svg8"
                 version="1.1"
